@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: light; }
+html.dark { color-scheme: dark; }
+html { scroll-behavior: smooth; }
+
+body {
+  @apply bg-paper text-zinc-950 antialiased dark:bg-ink dark:text-zinc-50;
+}
+
+::selection {
+  @apply bg-zinc-950 text-white dark:bg-white dark:text-zinc-950;
+}
+
+:focus-visible {
+  outline: 2px solid #e84545;
+  outline-offset: 3px;
+}
+
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
