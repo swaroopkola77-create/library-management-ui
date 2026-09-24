@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import type { Book } from "@/types/api";
 import { BookCard } from "@/components/books/BookCard";
 
@@ -29,7 +31,7 @@ export function BookGrid({
 
 function BookCardRow({ book }: { book: Book }) {
   return (
-    <article className="grid gap-4 border border-zinc-300 bg-white p-5 md:grid-cols-[1fr_auto] md:items-center dark:border-zinc-700 dark:bg-zinc-950">
+    <article className="surface grid gap-4 p-5 md:grid-cols-[1fr_auto] md:items-center">
       <div>
         <div className="flex flex-wrap items-center gap-3">
           <h2 className="text-lg font-semibold">{book.title}</h2>
@@ -44,9 +46,9 @@ function BookCardRow({ book }: { book: Book }) {
         <span className="text-xs uppercase tracking-[0.15em] text-zinc-500">
           {book.available ? "Available" : "Checked out"}
         </span>
-        <a href={"/books/" + book._id} className="text-sm font-semibold">
+        <Link href={"/books/" + book._id} className="text-sm font-semibold hover:opacity-60">
           View →
-        </a>
+        </Link>
       </div>
     </article>
   );
