@@ -30,17 +30,15 @@ function validate(values: BookFormValues) {
   const errors: Partial<Record<keyof BookFormValues, string>> = {};
 
   if (!values.title.trim()) errors.title = "Title is required.";
-  if (values.title.trim().length > 200) errors.title = "Title cannot exceed 200 characters.";
+  else if (values.title.trim().length > 200) errors.title = "Title cannot exceed 200 characters.";
 
   if (!values.author.trim()) errors.author = "Author is required.";
-  if (values.author.trim().length > 150) errors.author = "Author cannot exceed 150 characters.";
+  else if (values.author.trim().length > 150) errors.author = "Author cannot exceed 150 characters.";
 
   if (!values.isbn.trim()) errors.isbn = "ISBN is required.";
-  if (values.isbn.trim().length > 32) errors.isbn = "ISBN cannot exceed 32 characters.";
+  else if (values.isbn.trim().length > 32) errors.isbn = "ISBN cannot exceed 32 characters.";
 
-  if (values.category.trim().length > 100) {
-    errors.category = "Category cannot exceed 100 characters.";
-  }
+  if (values.category.trim().length > 100) errors.category = "Category cannot exceed 100 characters.";
 
   if (values.publishedYear) {
     const year = Number(values.publishedYear);
@@ -66,31 +64,20 @@ export function BookForm({
   const [values, setValues] = useState<BookFormValues>(() => ({
     ...emptyValues,
     ...initial,
-    publishedYear:
-      initial?.publishedYear !== undefined
-        ? String(initial.publishedYear)
-        : "",
+    publishedYear: initial?.publishedYear !== undefined ? String(initial.publishedYear) : "",
   }));
-  const [errors, setErrors] = useState<
-    Partial<Record<keyof BookFormValues, string>>
-  >({});
+  const [errors, setErrors] = useState<Partial<Record<keyof BookFormValues, string>>>({});
   const [serverError, setServerError] = useState("");
 
   useEffect(() => {
     setValues({
       ...emptyValues,
       ...initial,
-      publishedYear:
-        initial?.publishedYear !== undefined
-          ? String(initial.publishedYear)
-          : "",
+      publishedYear: initial?.publishedYear !== undefined ? String(initial.publishedYear) : "",
     });
   }, [initial]);
 
-  const update = <K extends keyof BookFormValues>(
-    key: K,
-    value: BookFormValues[K]
-  ) => {
+  const update = <K extends keyof BookFormValues>(key: K, value: BookFormValues[K]) => {
     setValues((current) => ({ ...current, [key]: value }));
   };
 
@@ -100,7 +87,6 @@ export function BookForm({
     const validation = validate(values);
     setErrors(validation);
     setServerError("");
-
     if (Object.keys(validation).length > 0) return;
 
     try {
@@ -109,17 +95,16 @@ export function BookForm({
         author: values.author.trim(),
         isbn: values.isbn.trim().toUpperCase(),
         category: values.category.trim() || "General",
-        publishedYear: values.publishedYear
-          ? Number(values.publishedYear)
-          : undefined,
+        publishedYear: values.publishedYear ? Number(values.publishedYear) : undefined,
         available: values.available,
       });
     } catch (error) {
       if (error instanceof ApiError) {
+        const detail = error.errors?.length ? " " + error.errors.join(" ") : "";
         setServerError(
           error.status === 409
             ? "That ISBN already exists. Use a unique ISBN."
-            : error.message
+            : error.message + detail
         );
         return;
       }
@@ -129,76 +114,35 @@ export function BookForm({
   };
 
   return (
-    <form onSubmit={submit} className="space-y-5">
+    <form onSubmit={submit} className="space-y-5" noValidate>
       {serverError && (
-        <div className="border border-red-300 bg-red-50 p-4 text-sm text-red-700 dark:border-red-900/50 dark:bg-red-950/20 dark:text-red-300">
+        <div role="alert" className="border border-red-300 bg-red-50 p-4 text-sm text-red-700 dark:border-red-900/50 dark:bg-red-950/20 dark:text-red-300">
           {serverError}
         </div>
       )}
 
       <Field label="Title" error={errors.title}>
-        <input
-          value={values.title}
-          onChange={(event) => update("title", event.target.value)}
-          className="form-input"
-          maxLength={200}
-          required
-        />
+        <input value={values.title} onChange={(event) => update("title", event.target.value)} className="form-input" maxLength={200} required />
       </Field>
-
       <Field label="Author" error={errors.author}>
-        <input
-          value={values.author}
-          onChange={(event) => update("author", event.target.value)}
-          className="form-input"
-          maxLength={150}
-          required
-        />
+        <input value={values.author} onChange={(event) => update("author", event.target.value)} className="form-input" maxLength={150} required />
       </Field>
-
       <Field label="ISBN" error={errors.isbn}>
-        <input
-          value={values.isbn}
-          onChange={(event) => update("isbn", event.target.value)}
-          className="form-input uppercase"
-          maxLength={32}
-          required
-        />
+        <input value={values.isbn} onChange={(event) => update("isbn", event.target.value)} className="form-input uppercase" maxLength={32} required />
       </Field>
-
       <Field label="Category" error={errors.category}>
-        <input
-          value={values.category}
-          onChange={(event) => update("category", event.target.value)}
-          className="form-input"
-          maxLength={100}
-        />
+        <input value={values.category} onChange={(event) => update("category", event.target.value)} className="form-input" maxLength={100} />
       </Field>
-
       <Field label="Published year" error={errors.publishedYear}>
-        <input
-          value={values.publishedYear}
-          onChange={(event) => update("publishedYear", event.target.value)}
-          className="form-input"
-          type="number"
-          min={0}
-          max={nextYear}
-        />
+        <input value={values.publishedYear} onChange={(event) => update("publishedYear", event.target.value)} className="form-input" type="number" min={0} max={nextYear} />
       </Field>
 
       <label className="flex items-center gap-3 text-sm">
-        <input
-          type="checkbox"
-          checked={values.available}
-          onChange={(event) => update("available", event.target.checked)}
-          className="h-4 w-4"
-        />
+        <input type="checkbox" checked={values.available} onChange={(event) => update("available", event.target.checked)} className="h-4 w-4" />
         Available
       </label>
 
-      <Button type="submit" disabled={busy}>
-        {busy ? "Saving..." : submitLabel}
-      </Button>
+      <Button type="submit" disabled={busy}>{busy ? "Saving..." : submitLabel}</Button>
     </form>
   );
 }
@@ -214,9 +158,7 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.16em]">
-        {label}
-      </span>
+      <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.16em]">{label}</span>
       {children}
       {error && <span className="mt-2 block text-xs text-red-500">{error}</span>}
     </label>
