@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+@theme {
+  --color-ink: #050505;
+  --color-paper: #f6f5f2;
+  --color-accent: #e84545;
+  --font-display: var(--font-display);
+  --font-sans: var(--font-sans);
+}
+
 :root {
   color-scheme: light;
 }
@@ -33,14 +41,12 @@ body {
   display: none;
 }
 
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
+.form-input {
+  @apply w-full border border-zinc-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-zinc-950 dark:border-zinc-700 dark:bg-zinc-950 dark:focus:border-white;
+}
 
-  to {
-    transform: translateX(-50%);
-  }
+.surface {
+  @apply border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -55,8 +61,4 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-}
-
-.form-input {
-  @apply w-full border border-zinc-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-zinc-950 dark:border-zinc-700 dark:bg-zinc-950 dark:focus:border-white;
 }
