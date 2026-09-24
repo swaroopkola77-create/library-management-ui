@@ -16,7 +16,7 @@ export default function BookDetailsPage() {
   const params = useParams<{ id: string }>();
   const [book, setBook] = useState<Book | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<unknown>(null);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     if (!params.id) return;
@@ -30,7 +30,7 @@ export default function BookDetailsPage() {
         if (!cancelled) setBook(result.data);
       })
       .catch((requestError: unknown) => {
-        if (!cancelled) setError(requestError);
+        if (!cancelled) setError(requestError instanceof Error ? requestError : new Error(String(requestError)));
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
