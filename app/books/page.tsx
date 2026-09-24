@@ -2,7 +2,7 @@
 
 import { Grid2X2, List, RotateCcw } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 
 import { BookGrid } from "@/components/books/BookGrid";
 import { BookSkeleton } from "@/components/books/BookSkeleton";
@@ -15,7 +15,7 @@ import type { Book, Pagination as PaginationType } from "@/types/api";
 
 const PAGE_SIZE = 12;
 
-export default function BooksPage() {
+function BooksCatalog() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -176,5 +176,23 @@ export default function BooksPage() {
         </p>
       )}
     </div>
+  );
+}
+
+export default function BooksPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-24">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {Array.from({ length: 8 }, (_, index) => (
+              <BookSkeleton key={index} />
+            ))}
+          </div>
+        </div>
+      }
+    >
+      <BooksCatalog />
+    </Suspense>
   );
 }
