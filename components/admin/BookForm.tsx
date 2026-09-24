@@ -16,7 +16,6 @@ export type BookFormValues = {
 };
 
 const nextYear = new Date().getFullYear() + 1;
-
 const emptyValues: BookFormValues = {
   title: "",
   author: "",
@@ -28,25 +27,17 @@ const emptyValues: BookFormValues = {
 
 function validate(values: BookFormValues) {
   const errors: Partial<Record<keyof BookFormValues, string>> = {};
-
   if (!values.title.trim()) errors.title = "Title is required.";
   else if (values.title.trim().length > 200) errors.title = "Title cannot exceed 200 characters.";
-
   if (!values.author.trim()) errors.author = "Author is required.";
   else if (values.author.trim().length > 150) errors.author = "Author cannot exceed 150 characters.";
-
   if (!values.isbn.trim()) errors.isbn = "ISBN is required.";
   else if (values.isbn.trim().length > 32) errors.isbn = "ISBN cannot exceed 32 characters.";
-
   if (values.category.trim().length > 100) errors.category = "Category cannot exceed 100 characters.";
-
   if (values.publishedYear) {
     const year = Number(values.publishedYear);
-    if (!Number.isInteger(year) || year < 0 || year > nextYear) {
-      errors.publishedYear = "Enter a year between 0 and next year.";
-    }
+    if (!Number.isInteger(year) || year < 0 || year > nextYear) errors.publishedYear = "Enter a year between 0 and next year.";
   }
-
   return errors;
 }
 
@@ -83,7 +74,6 @@ export function BookForm({
 
   const submit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     const validation = validate(values);
     setErrors(validation);
     setServerError("");
@@ -101,15 +91,10 @@ export function BookForm({
     } catch (error) {
       if (error instanceof ApiError) {
         const detail = error.errors?.length ? " " + error.errors.join(" ") : "";
-        setServerError(
-          error.status === 409
-            ? "That ISBN already exists. Use a unique ISBN."
-            : error.message + detail
-        );
-        return;
+        setServerError(error.status === 409 ? "That ISBN already exists. Use a unique ISBN." : error.message + detail);
+      } else {
+        setServerError("Unable to save the book. Please try again.");
       }
-
-      setServerError("Unable to save the book. Please try again.");
     }
   };
 
@@ -120,7 +105,6 @@ export function BookForm({
           {serverError}
         </div>
       )}
-
       <Field label="Title" error={errors.title}>
         <input value={values.title} onChange={(event) => update("title", event.target.value)} className="form-input" maxLength={200} required />
       </Field>
@@ -136,26 +120,16 @@ export function BookForm({
       <Field label="Published year" error={errors.publishedYear}>
         <input value={values.publishedYear} onChange={(event) => update("publishedYear", event.target.value)} className="form-input" type="number" min={0} max={nextYear} />
       </Field>
-
       <label className="flex items-center gap-3 text-sm">
         <input type="checkbox" checked={values.available} onChange={(event) => update("available", event.target.checked)} className="h-4 w-4" />
         Available
       </label>
-
       <Button type="submit" disabled={busy}>{busy ? "Saving..." : submitLabel}</Button>
     </form>
   );
 }
 
-function Field({
-  label,
-  error,
-  children,
-}: {
-  label: string;
-  error?: string;
-  children: React.ReactNode;
-}) {
+function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
   return (
     <label className="block">
       <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.16em]">{label}</span>
