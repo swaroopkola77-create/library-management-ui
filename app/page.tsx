@@ -20,6 +20,7 @@ export default function HomePage() {
   const [total, setTotal] = useState(0);
   const [available, setAvailable] = useState(0);
   const [apiLive, setApiLive] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
@@ -36,7 +37,15 @@ export default function HomePage() {
         setApiLive(health.success);
       })
       .catch(() => {
-        if (!cancelled) setApiLive(false);
+        if (!cancelled) {
+          setBooks([]);
+          setTotal(0);
+          setAvailable(0);
+          setApiLive(false);
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
       });
     return () => {
       cancelled = true;
@@ -56,9 +65,9 @@ export default function HomePage() {
         <div className="absolute inset-0 opacity-50 [background-image:linear-gradient(rgba(0,0,0,.04)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,.04)_1px,transparent_1px)] [background-size:44px_44px] dark:opacity-20" />
         <div className="relative mx-auto grid max-w-7xl gap-14 px-5 py-24 sm:px-8 lg:grid-cols-[1.1fr_.9fr] lg:py-32">
           <div>
-            <Badge tone={apiLive ? "live" : "muted"}>
+            <Badge tone={loading ? "muted" : apiLive ? "live" : "muted"}>
               <span className={"h-2 w-2 rounded-full " + (apiLive ? "bg-emerald-500" : "bg-zinc-400")} />
-              {apiLive ? "Library service live" : "Service unavailable"}
+              {loading ? "Connecting to library" : apiLive ? "Library service live" : "Service unavailable"}
             </Badge>
 
             <h1 className="mt-7 max-w-4xl font-display text-[clamp(4rem,10vw,8.5rem)] leading-[0.86] tracking-tight">
@@ -77,7 +86,7 @@ export default function HomePage() {
             </div>
 
             <div className="mt-14 grid max-w-xl grid-cols-2 gap-4 border-t border-zinc-200 pt-6 dark:border-zinc-800 sm:grid-cols-3">
-              {[["Books", total], ["Available", available], ["Service", apiLive ? "LIVE" : "OFF"]].map(([label, value]) => (
+              {[["Books", loading ? "—" : total], ["Available", loading ? "—" : available], ["Service", loading ? "..." : apiLive ? "LIVE" : "OFF"]].map(([label, value]) => (
                 <div key={String(label)}>
                   <p className="font-display text-4xl">{value}</p>
                   <p className="mt-1 text-xs uppercase tracking-[0.18em] text-zinc-500">{label}</p>
@@ -142,7 +151,7 @@ export default function HomePage() {
             <Link href="/books" className="hidden text-sm font-semibold md:block">View all →</Link>
           </div>
 
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {books.map((book, index) => (
               <motion.article
                 key={book._id}
