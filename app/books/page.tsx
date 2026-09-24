@@ -36,7 +36,7 @@ export default function BooksPage() {
   });
   const [view, setView] = useState<"grid" | "list">("grid");
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<unknown>(null);
+  const [error, setError] = useState<Error | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
 
   const syncUrl = useCallback(
@@ -81,7 +81,7 @@ export default function BooksPage() {
         setPagination(result.pagination);
       })
       .catch((requestError: unknown) => {
-        if (!cancelled) setError(requestError);
+        if (!cancelled) setError(requestError instanceof Error ? requestError : new Error(String(requestError)));
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
