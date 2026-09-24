@@ -99,10 +99,10 @@ function BooksCatalog() {
   };
 
   return (
-    <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-24">
-      <div className="border-b border-zinc-200 pb-12 dark:border-zinc-800">
+    <div className="mx-auto max-w-7xl px-5 py-10 sm:px-8 sm:py-14">
+      <div className="border-b border-zinc-200 pb-8 dark:border-zinc-800">
         <p className="text-xs uppercase tracking-[0.25em] text-accent">Catalog</p>
-        <div className="mt-3 flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
+        <div className="mt-3 flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
           <h1 className="font-display text-7xl leading-none sm:text-9xl">THE CATALOG.</h1>
           <p className="max-w-md text-sm leading-6 text-zinc-500">
             Search the live collection, filter availability, and open a book for the full record.
@@ -110,7 +110,7 @@ function BooksCatalog() {
         </div>
       </div>
 
-      <div className="mt-8 grid gap-3 lg:grid-cols-[1fr_auto_auto]">
+      <div className="mt-6 grid gap-3 lg:grid-cols-[1fr_auto_auto]">
         <SearchInput value={search} onChange={setSearch} />
         <select
           value={availableFilter}
@@ -149,7 +149,7 @@ function BooksCatalog() {
         </div>
       </div>
 
-      <div className="mt-10">
+      <div className="mt-7">
         {loading ? (
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {Array.from({ length: 8 }, (_, index) => <BookSkeleton key={index} />)}
@@ -164,13 +164,13 @@ function BooksCatalog() {
       </div>
 
       {!loading && !error && books.length > 0 && (
-        <div className="mt-12">
+        <div className="mt-8">
           <Pagination page={pagination.page} totalPages={pagination.totalPages} onPageChange={changePage} />
         </div>
       )}
 
       {!loading && !error && (
-        <p className="mt-5 flex items-center justify-center gap-2 text-center text-xs text-zinc-500">
+        <p className="mt-3 flex items-center justify-center gap-2 text-center text-xs text-zinc-500">
           <RotateCcw size={13} aria-hidden="true" />
           {pagination.total} book{pagination.total === 1 ? "" : "s"} in the collection
         </p>
