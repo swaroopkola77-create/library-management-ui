@@ -59,12 +59,14 @@ function BooksCatalog() {
     }
 
     const timer = window.setTimeout(() => {
-      setPage(1);
+      if (page !== 1) {
+        setPage(1);
+      }
       syncUrl(search, availableFilter, 1);
     }, 400);
 
     return () => window.clearTimeout(timer);
-  }, [search, availableFilter, syncUrl]);
+  }, [search, availableFilter, page, syncUrl]);
 
   useEffect(() => {
     let cancelled = false;
