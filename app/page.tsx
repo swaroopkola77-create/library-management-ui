@@ -70,22 +70,22 @@ export default function HomePage() {
               {loading ? "Connecting to library" : apiLive ? "Library service live" : "Service unavailable"}
             </Badge>
 
-            <h1 className="mt-7 max-w-4xl font-display text-[clamp(4rem,10vw,8.5rem)] leading-[0.86] tracking-tight">
+            <h1 className="mt-5 max-w-4xl font-display text-[clamp(4rem,10vw,8.5rem)] leading-[0.86] tracking-tight">
               READ.<br />BORROW.<br />REPEAT.
             </h1>
 
-            <p className="mt-8 max-w-xl text-base leading-7 text-zinc-600 dark:text-zinc-400 sm:text-lg">
+            <p className="mt-6 max-w-xl text-base leading-7 text-zinc-600 dark:text-zinc-400 sm:text-lg">
               Find your next book, check availability, and keep your reading moving.
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-6 flex flex-wrap gap-3">
               <Button href="/books">
                 Browse books <ArrowRight size={16} aria-hidden="true" />
               </Button>
               <Button href="/#how-it-works" variant="secondary">How it works</Button>
             </div>
 
-            <div className="mt-14 grid max-w-xl grid-cols-2 gap-4 border-t border-zinc-200 pt-6 dark:border-zinc-800 sm:grid-cols-3">
+            <div className="mt-10 grid max-w-xl grid-cols-2 gap-4 border-t border-zinc-200 pt-6 dark:border-zinc-800 sm:grid-cols-3">
               {[["Books", loading ? "—" : total], ["Available", loading ? "—" : available], ["Service", loading ? "..." : apiLive ? "LIVE" : "OFF"]].map(([label, value]) => (
                 <div key={String(label)}>
                   <p className="font-display text-4xl">{value}</p>
@@ -122,10 +122,10 @@ export default function HomePage() {
         </Marquee>
       </div>
 
-      <section className="mx-auto max-w-7xl px-5 py-24 sm:px-8">
+      <section className="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:py-20">
         <p className="text-xs uppercase tracking-[0.25em] text-accent">01 · Pick your shelf</p>
         <h2 className="mt-3 font-display text-6xl leading-none sm:text-8xl">YOUR CATEGORIES.</h2>
-        <div className="mt-10">
+        <div className="mt-8">
           <Carousel>
             {(categories.length ? categories : fallbackCategories).map((category) => (
               <Link
@@ -144,7 +144,7 @@ export default function HomePage() {
       </section>
 
       <section className="border-y border-zinc-200 bg-zinc-100/70 dark:border-zinc-800 dark:bg-zinc-950">
-        <div className="mx-auto max-w-7xl px-5 py-24 sm:px-8">
+        <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:py-20">
           <p className="text-xs uppercase tracking-[0.25em] text-accent">02 · Featured books</p>
           <div className="mt-3 flex items-end justify-between gap-6">
             <h2 className="font-display text-6xl leading-none sm:text-8xl">FRESH OFF THE SHELF.</h2>
@@ -188,10 +188,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="how-it-works" className="mx-auto max-w-7xl px-5 py-24 sm:px-8">
+      <section id="how-it-works" className="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:py-20">
         <p className="text-xs uppercase tracking-[0.25em] text-accent">03 · How it works</p>
         <h2 className="mt-3 font-display text-6xl leading-none sm:text-8xl">KEEP IT SIMPLE.</h2>
-        <div className="mt-12 grid gap-6 md:grid-cols-4">
+        <div className="mt-8 grid gap-5 md:grid-cols-4">
           {[
             ["01", "Find a book"],
             ["02", "Check availability"],
