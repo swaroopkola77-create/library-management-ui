@@ -33,7 +33,7 @@ function AdminDashboard() {
   const [editing, setEditing] = useState<Book | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<unknown>(null);
+  const [error, setError] = useState<Error | null>(null);
 
   const loadBooks = async () => {
     setError(null);
